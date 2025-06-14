@@ -33,6 +33,78 @@ def leitura_arquivo(arquivo):
                     'custo': custo
                 })
 
+def pccm(g, s, ant, dist):
+    # Inicializando os vetores Anterior e Distância
+    n = grafo['num_vert']
+    dist = [float('inf')] * n
+    ant = [None] * n
+    dist[s] = 0
+
+    OI = list(range(n)) # Ordem Crescente
+    OP = reversed(OI)   # Ordem Decrescente
+
+    for rodada in range(n - 1):
+        atualizacao = False
+        if rodada % 2 == 0:
+            O = OI
+        else:
+            O = OP
+
+        for u in O:
+            for arco in grafo['arco']:
+                if arco['origem'] == u:
+                    v = arco['destino']
+                    custo = arco['custo']
+                    if dist[u] + custo < dist[v]:
+                        dist[v] = dist[u] + custo
+                        ant[v] = u
+                        atualizacao = True
+        if atualizacao == False:
+            break
+    
+    # Verificação de ciclo negativo
+    ciclo_neg = False
+    # Última rodada para ver se há ciclo negativo
+    for arco in grafo['arco']:
+        u, v, custo = arco['origem'], arco['destino'], arco['custo']
+        if dist[u] + custo < dist[v]:
+            ciclo_neg = True
+            print("CN")
+            
+            ciclo = []
+            visitado = set()
+
+            x = v
+
+            for _ in range(n):
+                x = ant[x]
+
+            ciclo_ini = x
+            while x not in visitado:
+                visitado.add(x)
+                ciclo.append(x)
+                x = ant[x]
+            ciclo.append(x)
+            ciclo.reverse()
+
+            aux = ciclo[:-1]
+            menor_id = aux.index(min(aux))
+            ciclo_ordenado = aux[menor_id:] + aux[:menor_id]
+            ciclo_ordenado.append(ciclo_ordenado[0])
+
+            custo_ciclo = 0
+            for i in range(len(ciclo_ordenado) - 1):
+                u = ciclo_ordenado[i]
+                v = ciclo_ordenado[i + 1]
+                for arco in grafo['arco']:
+                    if arco['origem'] == u and arco['destino'] == v:
+                        custo_ciclo += arco['custo']
+                        break
+
+            #break
+    
+    if not ciclo_neg:
+        print("Sem")
 
 grafo = {
     'num_vert': 0,
@@ -49,6 +121,7 @@ arquivo = sys.argv[1]
 s = sys.argv[2]
 
 leitura_arquivo(arquivo)
+pccm(grafo, s)
 
 
 '''print("Número de vértices:", grafo['num_vert'])
