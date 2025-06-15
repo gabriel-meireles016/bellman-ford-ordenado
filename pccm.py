@@ -131,10 +131,6 @@ def pccm(g, s):
             else:
                 print("U", t)
 
-    
-    
-
-
 grafo = {
     'num_vert': 0,
     'num_arc': 0,
