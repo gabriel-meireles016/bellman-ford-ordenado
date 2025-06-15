@@ -7,6 +7,7 @@ def leitura_arquivo(arquivo):
         for linha in arq:
             linha = linha.strip()
             if (not linha) or (linha == 'T'):
+                print("E")
                 break
             
             partes = linha.split()
@@ -131,6 +132,8 @@ def pccm(g, s):
             custo = dist[t]
             comprimento = len(caminho) - 1
             print("P", t, custo, comprimento, *caminho)
+        else:
+            print("U", t)
 
 
 grafo = {
@@ -149,9 +152,3 @@ s = int(sys.argv[2])
 
 leitura_arquivo(arquivo)
 pccm(grafo, s)
-
-
-'''print("Número de vértices:", grafo['num_vert'])
-print("Número de arcos:", grafo['num_arc'])
-print("Vértices:", grafo['vertice'])
-print("Arcos:", grafo['arco'])'''
