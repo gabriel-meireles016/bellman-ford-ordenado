@@ -7,7 +7,6 @@ def leitura_arquivo(arquivo):
         for linha in arq:
             linha = linha.strip()
             if (not linha) or (linha == 'T'):
-                print("E")
                 break
             
             partes = linha.split()
@@ -74,7 +73,7 @@ def pccm(g, s):
     print("D", *dist)
     print("D", *ant)
 
-    '''# Verificação de ciclo negativo
+    # Verificação de ciclo negativo
     ciclo_neg = False
     # Última rodada para ver se há ciclo negativo
     for arco in grafo['arco']:
@@ -85,13 +84,12 @@ def pccm(g, s):
             
             ciclo = []
             visitado = set()
-
             x = v
 
             for _ in range(n):
                 x = ant[x]
 
-            ciclo_ini = x
+            #ciclo_ini = x
             while x not in visitado:
                 visitado.add(x)
                 ciclo.append(x)
@@ -112,28 +110,29 @@ def pccm(g, s):
                     if arco['origem'] == u and arco['destino'] == v:
                         custo_ciclo += arco['custo']
                         break
-
-            #break
+            
+            print("C", custo_ciclo, len(ciclo_ordenado) - 1, *ciclo_ordenado)
+            break
     
     if not ciclo_neg:
-        print("Sem")'''
+        for t in range(n):
+            if dist[t] != float('inf'):
+                caminho = []
+                atual = t
 
-    print()
-    for t in range(n):
-        if dist[t] != float('inf'):
-            caminho = []
-            atual = t
+                while atual is not None:
+                    caminho.append(atual)
+                    atual = ant[atual]
+                caminho.reverse()
 
-            while atual is not None:
-                caminho.append(atual)
-                atual = ant[atual]
-            caminho.reverse()
+                custo = dist[t]
+                comprimento = len(caminho) - 1
+                print("P", t, custo, comprimento, *caminho)
+            else:
+                print("U", t)
 
-            custo = dist[t]
-            comprimento = len(caminho) - 1
-            print("P", t, custo, comprimento, *caminho)
-        else:
-            print("U", t)
+    
+    
 
 
 grafo = {
