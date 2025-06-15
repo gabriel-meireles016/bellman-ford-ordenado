@@ -42,27 +42,37 @@ def pccm(g, s):
 
     OI = list(range(n)) # Ordem Crescente
     OP = reversed(OI)   # Ordem Decrescente
+    OP_2 = list(reversed(OI))
+
+    print("O I", OI)
+    print("O P", OP_2)
 
     for rodada in range(1, n - 1):
         atualizacao = False
         if rodada % 2 == 0:
-            O = OI
-        else:
             O = OP
+        else:
+            O = OI
 
+        #print('R',rodada)
         for u in O:
             for arco in grafo['arco']:
                 if arco['origem'] == u:
                     v = arco['destino']
                     custo = arco['custo']
                     if dist[u] + custo < dist[v]:
+                        #print(u, v)
                         dist[v] = dist[u] + custo
                         ant[v] = u
                         atualizacao = True
         if atualizacao == False:
             break
+        #print()
     
-    print(rodada) # última rodada completa
+    print("F", rodada) # última rodada completa
+    print("D", *dist)
+    print("D", *ant)
+
     '''# Verificação de ciclo negativo
     ciclo_neg = False
     # Última rodada para ver se há ciclo negativo
@@ -106,6 +116,22 @@ def pccm(g, s):
     
     if not ciclo_neg:
         print("Sem")'''
+
+    print()
+    for t in range(n):
+        if dist[t] != float('inf'):
+            caminho = []
+            atual = t
+
+            while atual is not None:
+                caminho.append(atual)
+                atual = ant[atual]
+            caminho.reverse()
+
+            custo = dist[t]
+            comprimento = len(caminho) - 1
+            print("P", t, custo, comprimento, *caminho)
+
 
 grafo = {
     'num_vert': 0,
