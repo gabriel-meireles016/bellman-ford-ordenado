@@ -138,12 +138,21 @@ grafo = {
     'arco': []
 }
 
-if len(sys.argv) < 2:
-    print('Argumentos insuficientes')
+try:
+    if len(sys.argv) < 2:
+        print('E')
+        sys.exit()
+
+    arquivo = sys.argv[1]
+    s = int(sys.argv[2])
+
+    leitura_arquivo(arquivo)
+
+    if s not in grafo['vertice'] or s < 0: # or s >= grafo['num_vert']:
+        print('E')
+        sys.exit()
+
+    pccm(grafo, s)
+except Exception:
+    print('E')
     sys.exit()
-
-arquivo = sys.argv[1]
-s = int(sys.argv[2])
-
-leitura_arquivo(arquivo)
-pccm(grafo, s)
