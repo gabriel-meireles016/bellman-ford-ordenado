@@ -35,7 +35,7 @@ def leitura_arquivo(arquivo):
 
 def pccm(g, s):
     # Inicializando os vetores Anterior e Distância
-    n = grafo['num_vert']
+    n = g['num_vert']
     dist = [float('inf')] * n
     ant = [None] * n
     dist[s] = 0
@@ -44,8 +44,8 @@ def pccm(g, s):
     OP = reversed(OI)   # Ordem Decrescente
     OP_2 = list(reversed(OI))
 
-    print("O I", OI)
-    print("O P", OP_2)
+    print("O I", *OI)
+    print("O P", *OP_2)
 
     for rodada in range(1, n - 1):
         atualizacao = False
@@ -56,7 +56,7 @@ def pccm(g, s):
 
         #print('R',rodada)
         for u in O:
-            for arco in grafo['arco']:
+            for arco in g['arco']:
                 if arco['origem'] == u:
                     v = arco['destino']
                     custo = arco['custo']
@@ -76,7 +76,7 @@ def pccm(g, s):
     # Verificação de ciclo negativo
     ciclo_neg = False
     # Última rodada para ver se há ciclo negativo
-    for arco in grafo['arco']:
+    for arco in g['arco']:
         u, v, custo = arco['origem'], arco['destino'], arco['custo']
         if dist[u] + custo < dist[v]:
             ciclo_neg = True
@@ -106,7 +106,7 @@ def pccm(g, s):
             for i in range(len(ciclo_ordenado) - 1):
                 u = ciclo_ordenado[i]
                 v = ciclo_ordenado[i + 1]
-                for arco in grafo['arco']:
+                for arco in g['arco']:
                     if arco['origem'] == u and arco['destino'] == v:
                         custo_ciclo += arco['custo']
                         break
