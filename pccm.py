@@ -41,11 +41,21 @@ def pccm(g, s):
     dist[s] = 0
 
     OI = list(range(n)) # Ordem Crescente
-    OP = reversed(OI)   # Ordem Decrescente
-    OP_2 = list(reversed(OI))
+    OI.remove(s)
+    OI.insert(0, s)
+
+    OP = list(range(n))   # Ordem Decrescente
+    OP.remove(s)
+    OP = list(reversed(OP))
+    OP.insert(0,s)
+    #OP_2 = list(reversed(OI))
+
+    
+    
+    
 
     print("O I", *OI)
-    print("O P", *OP_2)
+    print("O P", *OP)
 
     for rodada in range(1, n - 1):
         atualizacao = False
@@ -71,7 +81,7 @@ def pccm(g, s):
     
     print("F", rodada) # última rodada completa
     print("D", *dist)
-    print("D", *ant)
+    print("A", *[v if v is not None else "-" for v in ant])
 
     # Verificação de ciclo negativo
     ciclo_neg = False
@@ -126,7 +136,7 @@ def pccm(g, s):
                 caminho.reverse()
 
                 custo = dist[t]
-                comprimento = len(caminho) - 1
+                comprimento = len(caminho)
                 print("P", t, custo, comprimento, *caminho)
             else:
                 print("U", t)
