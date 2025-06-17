@@ -48,12 +48,7 @@ def pccm(g, s):
     OP.remove(s)
     OP = list(reversed(OP))
     OP.insert(0,s)
-    #OP_2 = list(reversed(OI))
-
     
-    
-    
-
     print("O I", *OI)
     print("O P", *OP)
 
