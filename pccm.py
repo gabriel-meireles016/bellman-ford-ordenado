@@ -33,13 +33,7 @@ def leitura_arquivo(arquivo):
                     'custo': custo
                 })
 
-def pccm(g, s):
-    # Inicializando os vetores Anterior e Distância
-    n = g['num_vert']
-    dist = [float('inf')] * n
-    ant = [None] * n
-    dist[s] = 0
-
+def ordem_O(s, n):
     OI = list(range(n)) # Ordem Crescente
     OI.remove(s)
     OI.insert(0, s)
@@ -48,38 +42,12 @@ def pccm(g, s):
     OP.remove(s)
     OP = list(reversed(OP))
     OP.insert(0,s)
-    
-    print("O I", *OI)
-    print("O P", *OP)
 
-    for rodada in range(1, n):
-        atualizacao = False
-        if rodada % 2 == 0:
-            O = OP
-        else:
-            O = OI
+    return OI, OP
 
-        #print('R',rodada)
-        for u in O:
-            for arco in g['arco']:
-                if arco['origem'] == u:
-                    v = arco['destino']
-                    custo = arco['custo']
-                    if dist[u] + custo < dist[v]:
-                        #print(u, v)
-                        dist[v] = dist[u] + custo
-                        ant[v] = u
-                        atualizacao = True
-        if atualizacao == False:
-            break
-    
-    print("F", rodada) # última rodada completa
-    print("D", *[v if v != float('inf') else "-" for v in dist])
-    print("A", *[v if v is not None else "-" for v in ant])
-
-    # Verificação de ciclo negativo
-    ciclo_neg = False
+def ciclo_negativo(n, g, ant, dist):
     # Última rodada para ver se há ciclo negativo
+    ciclo_neg = False
     for arco in g['arco']:
         u, v, custo = arco['origem'], arco['destino'], arco['custo']
         if dist[u] + custo < dist[v]:
@@ -118,8 +86,10 @@ def pccm(g, s):
             print("C", custo_ciclo, len(ciclo_ordenado) - 1, *ciclo_ordenado)
             break
     
-    if not ciclo_neg:
-        for t in range(n):
+    return ciclo_neg
+
+def imprimir_caminhos(n, dist, ant):
+    for t in range(n):
             if dist[t] != float('inf'):
                 caminho = []
                 atual = t
@@ -135,6 +105,50 @@ def pccm(g, s):
             else:
                 print("U", t)
 
+def pccm(g, s):
+    # Inicializando os vetores Anterior e Distância
+    n = g['num_vert']
+    dist = [float('inf')] * n
+    ant = [None] * n
+    dist[s] = 0
+
+    OI, OP = ordem_O(s, n)
+
+    print("O I", *OI)
+    print("O P", *OP)
+
+    for rodada in range(1, n):
+        atualizacao = False
+        if rodada % 2 == 0:
+            O = OP
+        else:
+            O = OI
+
+        #print('R',rodada)
+        for u in O:
+            for arco in g['arco']:
+                if arco['origem'] == u:
+                    v = arco['destino']
+                    custo = arco['custo']
+                    if dist[u] + custo < dist[v]:
+                        #print(u, v)
+                        dist[v] = dist[u] + custo
+                        ant[v] = u
+                        atualizacao = True
+        if atualizacao == False:
+            break
+    
+    print("F", rodada) # última rodada completa
+    print("D", *[v if v != float('inf') else "-" for v in dist])
+    print("A", *[v if v is not None else "-" for v in ant])
+
+    # Verificação de ciclo negativo
+    ciclo_neg = ciclo_negativo(n, g, ant, dist)
+    
+    
+    if not ciclo_neg:
+        imprimir_caminhos(n, dist, ant)
+        
 grafo = {
     'num_vert': 0,
     'num_arc': 0,
