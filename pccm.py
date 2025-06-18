@@ -52,7 +52,7 @@ def pccm(g, s):
     print("O I", *OI)
     print("O P", *OP)
 
-    for rodada in range(1, n - 1):
+    for rodada in range(1, n):
         atualizacao = False
         if rodada % 2 == 0:
             O = OP
@@ -72,10 +72,9 @@ def pccm(g, s):
                         atualizacao = True
         if atualizacao == False:
             break
-        #print()
     
     print("F", rodada) # última rodada completa
-    print("D", *dist)
+    print("D", *[v if v != float('inf') else "-" for v in dist])
     print("A", *[v if v is not None else "-" for v in ant])
 
     # Verificação de ciclo negativo
