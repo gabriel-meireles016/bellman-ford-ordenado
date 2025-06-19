@@ -133,6 +133,7 @@ def imprimir_caminhos(n, dist, ant):
         # impressão dos caminhos
         print("P", t, dist[t], len(caminho), *reversed(caminho))
             
+# função principal do algoritmo
 def pccm(g, s):
     # inicializando os vetores Distância e Anterior
     n = g['num_vert']
