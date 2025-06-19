@@ -1,6 +1,5 @@
-# python .\pccm.py .\grafo.txt s
-
 import sys
+from collections import deque, defaultdict
 
 def leitura_arquivo(arquivo):
     with open(arquivo, 'r') as arq:
@@ -32,6 +31,7 @@ def leitura_arquivo(arquivo):
                     'destino': destino,
                     'custo': custo
                 })
+                grafo['adj'][origem].append((destino, custo))
 
 def ordem_O(s, n):
     OI = list(range(n)) # Ordem Crescente
@@ -83,28 +83,27 @@ def ciclo_negativo(n, g, ant, dist):
                         custo_ciclo += arco['custo']
                         break
             
-            print("C", custo_ciclo, len(ciclo_ordenado) - 1, *ciclo_ordenado)
+            #print("C", custo_ciclo, len(ciclo_ordenado) - 1, *ciclo_ordenado)
+            print("C", len(ciclo_ordenado) - 1, custo_ciclo, *ciclo_ordenado)
             break
     
     return ciclo_neg
 
 def imprimir_caminhos(n, dist, ant):
     for t in range(n):
-            if dist[t] != float('inf'):
-                caminho = []
-                atual = t
+        if dist[t] == float('inf'):
+            print("U", t)
+            continue
+        
+        caminho = []
+        atual = t
 
-                while atual is not None:
-                    caminho.append(atual)
-                    atual = ant[atual]
-                caminho.reverse()
+        while atual is not None:
+            caminho.append(atual)
+            atual = ant[atual]
 
-                custo = dist[t]
-                comprimento = len(caminho)
-                print("P", t, custo, comprimento, *caminho)
-            else:
-                print("U", t)
-
+        print("P", t, dist[t], len(caminho), *reversed(caminho))
+            
 def pccm(g, s):
     # Inicializando os vetores Anterior e Distância
     n = g['num_vert']
@@ -124,18 +123,15 @@ def pccm(g, s):
         else:
             O = OI
 
-        #print('R',rodada)
         for u in O:
-            for arco in g['arco']:
-                if arco['origem'] == u:
-                    v = arco['destino']
-                    custo = arco['custo']
+            if u in g['adj']:
+                for v, custo in g['adj'][u]:
                     if dist[u] + custo < dist[v]:
-                        #print(u, v)
                         dist[v] = dist[u] + custo
                         ant[v] = u
                         atualizacao = True
-        if atualizacao == False:
+        
+        if not atualizacao:
             break
     
     print("F", rodada) # última rodada completa
@@ -144,8 +140,6 @@ def pccm(g, s):
 
     # Verificação de ciclo negativo
     ciclo_neg = ciclo_negativo(n, g, ant, dist)
-    
-    
     if not ciclo_neg:
         imprimir_caminhos(n, dist, ant)
         
@@ -153,7 +147,8 @@ grafo = {
     'num_vert': 0,
     'num_arc': 0,
     'vertice': {},
-    'arco': []
+    'arco': [],
+    'adj': defaultdict(list)
 }
 
 try:
@@ -166,7 +161,7 @@ try:
 
     leitura_arquivo(arquivo)
 
-    if s not in grafo['vertice'] or s < 0: # or s >= grafo['num_vert']:
+    if s not in grafo['vertice'] or s < 0:
         print('E')
         sys.exit()
 
