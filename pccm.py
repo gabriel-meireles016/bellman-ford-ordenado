@@ -1,5 +1,5 @@
 import sys
-from collections import deque, defaultdict
+from collections import defaultdict
 
 def leitura_arquivo(arquivo):
     with open(arquivo, 'r') as arq:
